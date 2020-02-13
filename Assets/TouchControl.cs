@@ -7,10 +7,12 @@ public class TouchControl : MonoBehaviour
 
 
 {
+    private float drag_distance;
     float timer;
     float MAX_TAP_TIME = 0.2f;
     bool has_moved = false;
 
+    Controllable currently_selected_object;
     Camera my_camera = new Camera();
     // Start is called before the first frame update
     void Start()
@@ -29,6 +31,8 @@ public class TouchControl : MonoBehaviour
 
             if (touch.phase == TouchPhase.Began)
             {
+                if (currently_selected_object)
+                    drag_distance = Vector3.Distance(currently_selected_object.transform.position, my_camera.transform.position);
                 timer = 0f;
                 has_moved = false;
             }
@@ -44,13 +48,19 @@ public class TouchControl : MonoBehaviour
                     implement_tap(touch);
             }
 
+            if (touch.phase == TouchPhase.Stationary || touch.phase == TouchPhase.Moved)
+            {
+                // lerp and set the position of the current object to that of the touch, but smoothly over time.
+                if (currently_selected_object)
+                {
+                    Ray drag_ray = my_camera.ScreenPointToRay(touch.position);
+                    Vector3 new_destination = drag_ray.GetPoint(drag_distance);
+                    currently_selected_object.latestDragPosition(new_destination);
+                }
+
+            }
+
         }
-
-
-
-
-
-
     }
 
     private void implement_tap(Touch touch)
@@ -65,11 +75,17 @@ public class TouchControl : MonoBehaviour
 
             if (object_hit)
             {
-                object_hit.ChangeColour(Color.magenta);
+
+                if (currently_selected_object)
+                    currently_selected_object.ChangeColour(Color.white);
+                    object_hit.ChangeColour(Color.magenta);
+                    currently_selected_object = object_hit; 
             }
 
         }
     }
+
+
 }
 
 
