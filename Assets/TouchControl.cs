@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TouchControl : MonoBehaviour
-
-
 {
     private float drag_distance;
     float timer;
@@ -23,7 +21,6 @@ public class TouchControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         if (Input.touchCount > 0)
         {
             Touch touch = Input.touches[0];
@@ -33,8 +30,8 @@ public class TouchControl : MonoBehaviour
             {
                 if (currently_selected_object)
                     drag_distance = Vector3.Distance(currently_selected_object.transform.position, my_camera.transform.position);
-                timer = 0f;
-                has_moved = false;
+                    timer = 0f;
+                    has_moved = false;
             }
 
             if (touch.phase == TouchPhase.Moved)
@@ -57,9 +54,7 @@ public class TouchControl : MonoBehaviour
                     Vector3 new_destination = drag_ray.GetPoint(drag_distance);
                     currently_selected_object.latestDragPosition(new_destination);
                 }
-
             }
-
         }
     }
 
@@ -75,17 +70,15 @@ public class TouchControl : MonoBehaviour
 
             if (object_hit)
             {
-
                 if (currently_selected_object)
+                {
                     currently_selected_object.ChangeColour(Color.white);
+                }
                     object_hit.ChangeColour(Color.magenta);
-                    currently_selected_object = object_hit; 
+                    currently_selected_object = object_hit;
             }
-
         }
     }
-
-
 }
 
 
