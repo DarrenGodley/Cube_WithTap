@@ -9,6 +9,12 @@ public class TouchControl : MonoBehaviour
     float timer;
     float MAX_TAP_TIME = 0.2f;
     bool has_moved = false;
+    private float startingFingerAngle;
+    private Quaternion startingobjectAngle;
+    private float startingDistance;
+    private Vector3 startingScale;
+    private float newFingerDestination;
+
 
     Controllable currently_selected_object;
     Camera my_camera = new Camera();
@@ -21,6 +27,33 @@ public class TouchControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.touchCount == 2)
+        {
+            bool A = Input.GetKey(KeyCode.Space);
+            Touch touch1 = Input.touches[0];
+            Touch touch2 = Input.touches[1];
+
+            if ((touch1.phase == TouchPhase.Began) || (touch2.phase == TouchPhase.Began))
+            {
+                Vector2 diff = touch2.position - touch1.position;
+                startingFingerAngle = Mathf.Atan2(diff.y, diff.x);
+                startingobjectAngle = currently_selected_object.transform.rotation;
+                startingDistance = Vector2.Distance(touch1.position, touch2.position);
+                startingScale = currently_selected_object.transform.localScale;
+            }
+
+            if (currently_selected_object)
+            {
+                Vector2 diff = touch2.position - touch1.position;
+
+                newFingerDestination = Mathf.Atan2(diff.y, diff.x);
+                currently_selected_object.transform.rotation = startingobjectAngle * Quaternion.AngleAxis(Mathf.Rad2Deg * (newFingerDestination - startingFingerAngle), my_camera.transform.forward);
+                currently_selected_object.transform.localScale = (Vector2.Distance(touch1.position, touch2.position) / startingDistance) * startingScale;
+            }
+        }
+
+        else 
+
         if (Input.touchCount > 0)
         {
             Touch touch = Input.touches[0];
