@@ -30,8 +30,8 @@ public class TouchControl : MonoBehaviour
             {
                 if (currently_selected_object)
                     drag_distance = Vector3.Distance(currently_selected_object.transform.position, my_camera.transform.position);
-                    timer = 0f;
-                    has_moved = false;
+                timer = 0f;
+                has_moved = false;
             }
 
             if (touch.phase == TouchPhase.Moved)
@@ -74,8 +74,8 @@ public class TouchControl : MonoBehaviour
                 {
                     currently_selected_object.ChangeColour(Color.white);
                 }
-                    object_hit.ChangeColour(Color.magenta);
-                    currently_selected_object = object_hit;
+                object_hit.ChangeColour(Color.magenta);
+                currently_selected_object = object_hit;
             }
         }
     }
