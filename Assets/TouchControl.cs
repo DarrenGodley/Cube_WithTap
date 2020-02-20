@@ -14,6 +14,7 @@ public class TouchControl : MonoBehaviour
     private float startingDistance;
     private Vector3 startingScale;
     private float newFingerDestination;
+    public float speed = 0.1f;
 
 
     Controllable currently_selected_object;
@@ -87,6 +88,15 @@ public class TouchControl : MonoBehaviour
                     Vector3 new_destination = drag_ray.GetPoint(drag_distance);
                     currently_selected_object.latestDragPosition(new_destination);
                 }
+            }
+        }
+
+        if (!currently_selected_object)
+        {
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
+            {
+                Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
+                transform.Translate(-touchDeltaPosition.x * speed * Time.deltaTime, -touchDeltaPosition.y * speed * Time.deltaTime, 0);
             }
         }
     }
